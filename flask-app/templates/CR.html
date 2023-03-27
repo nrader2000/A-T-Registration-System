@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="login-form w3-center">
+    <a href="{{ url_for('home') }}" class="w3-display-topleft w3-margin back-btn"><i class="fa fa-caret-left"></i> Back</a>
+    <h1>{% block title %} NCAT Class Registration {% endblock %}</h1><br>
+    <form action="" method="POST">
+        <input list="semesters" name="semester" placeholder="Select semester here"><br><br>
+        <datalist id="semesters">
+            <option value="Summer 1 2023">
+            <option value="Summer 2 2023"> 
+            <option value="Fall 2023">
+        </datalist>
+        <input type="submit">
+    </form><br>
+    <a class="btn" href="{{ url_for('VAC') }}">View Available Classes</a><br><br>
+    <a class="btn" href="{{ url_for('VSSC') }}">View Suggested Semester Classes</a><br><br>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="login-form w3-center">
+    <!-- <a href="/" class="w3-display-topleft w3-margin back-btn"><i class="fa fa-caret-left"></i> Back</a> -->
+    <h1>{% block title %} NCAT Registration Home {% endblock %}</h1><br>
+    <a class="btn" href="{{ url_for('CR') }}">Class Registration</a><br><br>
+    <a class="btn" href="{{ url_for('AA') }}">Academic Audit</a><br><br>
+    <a class="btn" href="{{ url_for('COR') }}">Course Override Request</a><br><br>
+    <a class="btn logout-btn" href="{{ url_for('index') }}">Logout</a>
+</div>
+{% endblock %}
