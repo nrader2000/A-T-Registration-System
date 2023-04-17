@@ -1,7 +1,15 @@
 from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
 
+# basic setup
 app = Flask(__name__)
+app.debug = True
 
+# db setup
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+db = SQLAlchemy(app)
+
+# route and page function setup
 @app.route("/")
 def index():
     return render_template('index.html')

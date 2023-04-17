@@ -1,0 +1,49 @@
+CREATE TABLE Student
+(
+  Name VARCHAR(50) NOT NULL,
+  BannerID INT NOT NULL,
+  Phone_Number NUMERIC(15) NOT NULL,
+  Password VARCHAR(50) NOT NULL,
+  Address VARCHAR(50) NOT NULL,
+  Email VARCHAR(50) NOT NULL,
+  PRIMARY KEY (BannerID)
+);
+
+CREATE TABLE Faculty
+(
+  Name VARCHAR(50) NOT NULL,
+  BannerID INT NOT NULL,
+  Password VARCHAR(50) NOT NULL,
+  Phone_Number NUMERIC(15) NOT NULL,
+  Address VARCHAR(50) NOT NULL,
+  Email VARCHAR(50) NOT NULL,
+  PRIMARY KEY (BannerID)
+);
+
+CREATE TABLE Admin
+(
+  ID INT NOT NULL,
+  Name VARCHAR(50) NOT NULL,
+  Password VARCHAR(50) NOT NULL,
+  PRIMARY KEY (ID)
+);
+
+CREATE TABLE Courses
+(
+  CourseID INT NOT NULL,
+  Title VARCHAR(50) NOT NULL,
+  Major VARCHAR(50) NOT NULL,
+  Semester VARCHAR(10) NOT NULL,
+  Prerequisites VARCHAR(50) NOT NULL,
+  PRIMARY KEY (CourseID)
+);
+
+CREATE TABLE Classes
+(
+  ClassID INT NOT NULL,
+  SeatsAvailable INT NOT NULL,
+  CourseID INT NOT NULL,
+  PRIMARY KEY (ClassID),
+  FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+);
+
