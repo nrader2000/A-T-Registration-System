@@ -2,50 +2,54 @@ DROP TABLE IF EXISTS Students, Faculty, Admins, Courses, Classes;
 
 CREATE TABLE Students
 (
-  BannerID INT NOT NULL AUTOINCREMENT,
+  StudentID INT NOT NULL AUTO_INCREMENT,
+  Username TEXT NOT NULL,
   Password TEXT NOT NULL,
   Name TEXT NOT NULL,
   Address TEXT NOT NULL,
   Phone_Number NUMERIC(10) NOT NULL,
   Email TEXT NOT NULL,
-  PRIMARY KEY (BannerID)
+  PRIMARY KEY (StudentID)
 );
 
 CREATE TABLE Faculty
 (
-  BannerID INT NOT NULL AUTOINCREMENT,
+  FacultyID INT NOT NULL AUTO_INCREMENT,
+  Username TEXT NOT NULL,
   Password TEXT NOT NULL,
   Name TEXT NOT NULL,
   Address TEXT NOT NULL,
   Phone_Number NUMERIC(10) NOT NULL,
   Email TEXT NOT NULL,
-  PRIMARY KEY (BannerID)
+  PRIMARY KEY (FacultyID)
 );
 
 CREATE TABLE Admins
 (
-  ID INT NOT NULL AUTOINCREMENT,
+  AdminID INT NOT NULL AUTO_INCREMENT,
+  Username TEXT NOT NULL,
   Password TEXT NOT NULL,
   Name TEXT NOT NULL,
-  PRIMARY KEY (ID)
+  PRIMARY KEY (AdminID)
 );
 
 CREATE TABLE Courses
 (
-  CourseID INT NOT NULL AUTOINCREMENT,
-  Title TEXT NOT NULL,
+  CourseID INT NOT NULL AUTO_INCREMENT,
+  Code Text NOT NULL,
   Major TEXT NOT NULL,
+  Title TEXT NOT NULL,
   Semester TEXT NOT NULL,
-  Prerequisites TEXT NOT NULL,
-  PRIMARY KEY (CourseID)
+  Prerequisites INT,
+  PRIMARY KEY (CourseID),
+  FOREIGN KEY (Prerequisites) REFERENCES Courses(CourseID)
 );
 
 CREATE TABLE Classes
 (
-  ClassID INT NOT NULL AUTOINCREMENT,
-  SeatsAvailable INT NOT NULL,
+  ClassID INT NOT NULL AUTO_INCREMENT,
   CourseID INT NOT NULL,
+  SeatsAvailable INT NOT NULL,
   PRIMARY KEY (ClassID),
   FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
 );
-

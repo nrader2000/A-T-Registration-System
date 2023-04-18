@@ -1,13 +1,15 @@
+import sqlite3
 from flask import Flask, render_template
-#from flask_sqlalchemy import SQLAlchemy
 
 # basic setup
 app = Flask(__name__)
 app.debug = True
 
 # db setup
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-#db = SQLAlchemy(app)
+def get_db_connection():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 # route and page function setup
 @app.route("/")
@@ -57,3 +59,11 @@ def VSI():
 @app.route("/register-for-graduation")
 def RFG():
     return render_template("RFG.html")
+
+@app.route("/db-test")
+def dbtest():
+    print('connected to db!')
+    conn = get_db_connection()
+    table = conn.execute('SELECT * FROM Students').fetchall()
+    conn.close()
+    return render_template("db-test.html",table=table)

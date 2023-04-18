@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} DB-TEST {% endblock %}</h1>
+    {% for student in Students %}
+        <a href="#">
+            <h2>{{ student['Name'] }}</h2>
+        </a>
+        <span class="badge badge-primary">{{ student['Email'] }}</span>
+        <hr>
+    {% endfor %}
+{% endblock %}
