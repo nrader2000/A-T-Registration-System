@@ -5,6 +5,10 @@ from flask import Flask, render_template
 app = Flask(__name__)
 app.debug = True
 
+# run the init_db.py script
+with open("init_db.py") as f:
+    exec(f.read())
+
 # db setup
 def get_db_connection():
     conn = sqlite3.connect('database.db')
@@ -62,8 +66,7 @@ def RFG():
 
 @app.route("/db-test")
 def dbtest():
-    print('connected to db!')
     conn = get_db_connection()
-    table = conn.execute('SELECT * FROM Students').fetchall()
+    students = conn.execute('SELECT * FROM Students').fetchall()
     conn.close()
-    return render_template("db-test.html",table=table)
+    return render_template("db-test.html",students=students)

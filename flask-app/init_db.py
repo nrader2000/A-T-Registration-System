@@ -47,7 +47,7 @@ CREATE TABLE Faculty
   PRIMARY KEY (FacultyID)
 );
 
-INSERT INTO Faculty VALUES (1,'kroy','testpass09','Kaaushik Roy','48 Fake Address Ln',3367891234,'kroy@ncat.edu');
+INSERT INTO Faculty VALUES (1,'kroy','testpass09','Kaushik Roy','48 Fake Address Ln',3367891234,'kroy@ncat.edu');
 """)
 
 #create and insert data into admins table
