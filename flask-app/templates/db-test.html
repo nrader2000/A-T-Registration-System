@@ -1,12 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<a href="{{ url_for('home') }}" class="w3-display-topleft w3-margin back-btn"><i class="fa fa-caret-left"></i> Back</a>
+<div class="login-form w3-center">
     <h1>{% block title %} DB-TEST {% endblock %}</h1>
-    {% for student in students %}
+    <div style="overflow: auto;">
+        {% for course in courses %}
         <a href="#">
-            <h2>{{ student['Name'] }}</h2>
+            <h3>{{ course['Code'] }} - {{ course['Title']}}</h3>
         </a>
-        <span class="badge badge-primary">{{ student['Email'] }}</span>
+        <span class="badge badge-primary">{{ course['Major'] }}</span>
+        <span class="badge badge-primary">{{ course['Semester'] }}</span>
+        <span class="badge badge-primary">{{ course['Prerequisites'] }}</span>
         <hr>
     {% endfor %}
+    </div>
+</div>
 {% endblock %}

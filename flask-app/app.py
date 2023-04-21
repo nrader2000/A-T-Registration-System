@@ -67,6 +67,6 @@ def RFG():
 @app.route("/db-test")
 def dbtest():
     conn = get_db_connection()
-    students = conn.execute('SELECT * FROM Students').fetchall()
+    courses = conn.execute('SELECT * FROM Courses').fetchall()
     conn.close()
-    return render_template("db-test.html",students=students)
+    return render_template("db-test.html",courses=courses)

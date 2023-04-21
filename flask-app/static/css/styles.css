@@ -5,10 +5,17 @@ html{
 }
 
 .w3-display-container{
-    padding: 1em 5em 1em 5em;
+    height: 80%;
+    width: 60%;
+    padding: 2%;
+    overflow: auto;
     background-color: rgba(255, 255, 255, 0.95);
     border: solid 0.5px darkslategrey;
     border-radius: 1em;
+}
+
+.w3-display-container::-webkit-scrollbar{
+    display: none;
 }
 
 .login-form h1 {
@@ -16,7 +23,7 @@ html{
     font-weight: bold;
     color: #000000;
     font-size: 36px;
-    padding: 0 2em 0 2em;
+    /* padding: 0 2em 0 2em; */
     border-radius: 0.25em;
 }
 .login-form input[type="password"],

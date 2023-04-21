@@ -2,7 +2,7 @@
 
 {% block content%}
     <div class="login-form w3-center">
-        <!-- <a href="/" class="w3-display-topleft w3-margin back-btn"><i class="fa fa-caret-left"></i> Back</a> -->
+        <a href="{{ url_for('index') }}" class="w3-display-topleft w3-margin back-btn"><i class="fa fa-caret-left"></i> Back</a>
         <h1>{% block title %}NCAT Register{% endblock %}</h1><br>
         <form action="" method="POST">
             <input type="text" name="bannerid" placeholder="Bannerid" required><br><br>
