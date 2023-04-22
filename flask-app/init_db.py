@@ -17,14 +17,13 @@ cur.execute("DROP TABLE IF EXISTS Classes")
 cur.executescript("""
 CREATE TABLE Students
 (
-  StudentID INT NOT NULL,
+  StudentID INT PRIMARY KEY,
   Username TEXT NOT NULL,
   Password TEXT NOT NULL,
   Name TEXT NOT NULL,
   Address TEXT NOT NULL,
-  Phone_Number NUMERIC(10) NOT NULL,
-  Email TEXT NOT NULL,
-  PRIMARY KEY (StudentID)
+  Phone_Number NUMERIC(15) NOT NULL,
+  Email TEXT NOT NULL
 );
 
 INSERT INTO Students VALUES
@@ -37,14 +36,13 @@ INSERT INTO Students VALUES
 cur.executescript("""
 CREATE TABLE Faculty
 (
-  FacultyID INT NOT NULL,
+  FacultyID INT PRIMARY KEY,
   Username TEXT NOT NULL,
   Password TEXT NOT NULL,
   Name TEXT NOT NULL,
   Address TEXT NOT NULL,
   Phone_Number NUMERIC(10) NOT NULL,
-  Email TEXT NOT NULL,
-  PRIMARY KEY (FacultyID)
+  Email TEXT NOT NULL
 );
 
 INSERT INTO Faculty VALUES (1,'kroy','testpass09','Kaushik Roy','48 Fake Address Ln',3367891234,'kroy@ncat.edu');
@@ -54,11 +52,10 @@ INSERT INTO Faculty VALUES (1,'kroy','testpass09','Kaushik Roy','48 Fake Address
 cur.executescript("""
 CREATE TABLE Admins
 (
-  AdminID INT NOT NULL,
+  AdminID INT PRIMARY KEY,
   Username TEXT NOT NULL,
   Password TEXT NOT NULL,
-  Name TEXT NOT NULL,
-  PRIMARY KEY (AdminID)
+  Name TEXT NOT NULL
 );
 
 INSERT INTO Admins VALUES (1,'tadmin091','testadminpass09','NCATRS Admin');
@@ -68,13 +65,12 @@ INSERT INTO Admins VALUES (1,'tadmin091','testadminpass09','NCATRS Admin');
 cur.executescript("""
 CREATE TABLE Courses
 (
-  CourseID INT NOT NULL,
+  CourseID INT PRIMARY KEY,
   Code Text NOT NULL,
   Major TEXT NOT NULL,
   Title TEXT NOT NULL,
   Semester TEXT NOT NULL,
   Prerequisites INT,
-  PRIMARY KEY (CourseID),
   FOREIGN KEY (Prerequisites) REFERENCES Courses(CourseID)
 );
 
@@ -102,10 +98,9 @@ INSERT INTO Courses VALUES
 cur.executescript("""
 CREATE TABLE Classes
 (
-  ClassID INT NOT NULL,
+  ClassID INT PRIMARY KEY,
   CourseID INT NOT NULL,
   SeatsAvailable INT NOT NULL,
-  PRIMARY KEY (ClassID),
   FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
 );
 

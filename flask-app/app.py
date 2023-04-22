@@ -1,13 +1,15 @@
 import sqlite3
-from flask import Flask, render_template
-
-# basic setup
-app = Flask(__name__)
-app.debug = True
+from flask import Flask, render_template, redirect, request, url_for, flash
+from flask_login import login_user, LoginManager, login_required, logout_user
 
 # run the init_db.py script
 with open("init_db.py") as f:
     exec(f.read())
+
+# basic setup
+app = Flask(__name__)
+app.debug = True
+app.config['SECRET_KEY'] = 'secret'
 
 # db setup
 def get_db_connection():
@@ -15,10 +17,49 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+#login setup
+login_manager = LoginManager()
+login_manager.login_view = 'index'
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return
+
 # route and page function setup
 @app.route("/")
 def index():
     return render_template('index.html')
+
+#login functionality - within the index page
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form.get('username')
+    print(username)
+    password = request.form.get('password')
+    print(password)
+    if username and password:
+        conn = get_db_connection()
+        if conn.execute('SELECT * FROM Students WHERE Username = ? AND Password = ?',(username,password)).fetchone():
+            student = conn.execute('SELECT * FROM Students WHERE Username = ? AND Password = ?',(username,password)).fetchone()
+            conn.close()
+            return redirect(url_for('home',student=student))
+        elif conn.execute('SELECT * FROM Faculty WHERE Username = ? AND Password = ?',(username,password)).fetchone():
+            faculty = conn.execute('SELECT * FROM Faculty WHERE Username = ? AND Password = ?',(username,password)).fetchone()
+            conn.close()
+            return redirect(url_for('home',faculty=faculty))
+        elif conn.execute('SELECT * FROM Admins WHERE Username = ? AND Password = ?',(username,password)).fetchone():
+            admin = conn.execute('SELECT * FROM Admins WHERE Username = ? AND Password = ?',(username,password)).fetchone()
+            conn.close()
+            return redirect(url_for('home',admin=admin))
+        else:
+            flash("Invalid Credentials! Please Try Again!")
+            return redirect(url_for('index'))
+
+#logout functionality - within the home page
+@app.route('/logout')
+def logout():
+    return redirect(url_for('index'))
 
 @app.route("/register")
 def register():

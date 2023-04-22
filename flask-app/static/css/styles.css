@@ -108,3 +108,9 @@ html{
 .back-btn:hover{
     background-color: dodgerblue;
 }
+
+.alert{
+    background-color: red;
+    color: white;
+    font-weight: bold;
+}

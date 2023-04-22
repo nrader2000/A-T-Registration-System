@@ -5,7 +5,7 @@
 <div class="login-form w3-center">
     <h1>{% block title %} DB-TEST {% endblock %}</h1>
     <div style="overflow: auto;">
-        {% for course in courses %}
+    {% for course in courses %}
         <a href="#">
             <h3>{{ course['Code'] }} - {{ course['Title']}}</h3>
         </a>
