@@ -41,7 +41,7 @@ CREATE TABLE Faculty
   Password TEXT NOT NULL,
   Name TEXT NOT NULL,
   Address TEXT NOT NULL,
-  Phone_Number NUMERIC(10) NOT NULL,
+  Phone_Number NUMERIC(15) NOT NULL,
   Email TEXT NOT NULL
 );
 
