@@ -4,14 +4,16 @@
 <div class="login-form w3-center">
     <a href="{{ url_for('CR') }}" class="w3-display-topleft w3-margin back-btn"><i class="fa fa-caret-left"></i> Back</a>
     <h1>{% block title %} NCAT View Available Classes {% endblock %}</h1><br>
-    <form action="" method="POST">
-        <input list="majors" name="major" placeholder="Select major here"><br><br>
-        <datalist id="majors">
-            <option value="">
-            <option value=""> 
-            <option value="">
-        </datalist>
-        <input type="submit">
-    </form><br>
+    <div style="overflow: auto;">
+        {% for course in courses %}
+            <a href="#">
+                <h3>{{ course['Code'] }} - {{ course['Title']}}</h3>
+            </a>
+            <span class="badge badge-primary">{{ course['Major'] }}</span>
+            <span class="badge badge-primary">{{ course['Semester'] }}</span>
+            <span class="badge badge-primary">{{ course['Prerequisites'] }}</span>
+            <hr>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

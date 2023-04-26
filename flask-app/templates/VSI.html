@@ -3,6 +3,12 @@
 {% block content %}
 <div class="login-form w3-center">
     <a href="{{ url_for('AA') }}" class="w3-display-topleft w3-margin back-btn"><i class="fa fa-caret-left"></i> Back</a>
-    <h1>{% block title %} NCAT View Student Infomation {% endblock %}</h1><br>
+    <h1>{% block title %} NCAT View Account Infomation {% endblock %}</h1><br>
+    <h3>{{ user_info['Name'] }}</h3><br>
+    <h5 class="badge badge-primary">Username: {{ user_info['Username'] }}</h5>
+    <h5 class="badge badge-primary">Password: {{ user_info['Password'] }}</h5>
+    <h5 class="badge badge-primary">Email: {{ user_info['Email'] }}</h5>
+    <h5 class="badge badge-primary">Address: {{ user_info['Address'] }}</h5>
+    <h5 class="badge badge-primary">Phone Number: {{ user_info['Phone_Number'] }}</h5>
 </div>
 {% endblock %}

@@ -15,6 +15,7 @@ def get_db_connection():
 
 # user global variable
 user = []
+semester = ""
 
 #--------route and page function setup---------
 #index page/login page route
@@ -125,9 +126,18 @@ def home():
         return redirect(url_for('index'))
 
 #class registration page route
-@app.route("/class-registration")
+@app.route("/class-registration", methods=['GET','POST'])
 def CR():
+    if semester:
+        print(semester)
     return render_template("CR.html")
+
+#submit semester functionality - within class registation page
+@app.route("/submit-semester", methods=['POST'])
+def submit_semester():
+    semester = request.form.get('semester')
+    print("Selected " + semester + "...")
+    return redirect(url_for('CR',semester=semester))
 
 #academic audit page route
 @app.route("/academic-audit")
@@ -140,9 +150,18 @@ def COR():
     return render_template("COR.html")
 
 #VAC page route
-@app.route("/view-available-classes")
+@app.route("/view-available-classes", methods=['GET'])
 def VAC():
-    return render_template("VAC.html")
+    semester_select = semester
+    print(semester_select)
+    if semester_select:
+        conn = get_db_connection()
+        courses = conn.execute('SELECT * FROM Courses WHERE Semester = ?;',[semester_select]).fetchall()
+        conn.close()
+    else: #should not get here my normal means
+        print("no semester selected")
+        return redirect(url_for('CR'))
+    return render_template("VAC.html",courses=courses)
 
 #VSSC page route
 @app.route("/view-suggested-semester-classes")
@@ -162,7 +181,24 @@ def VTI():
 #student info page route
 @app.route("/view-student-information")
 def VSI():
-    return render_template("VSI.html")
+    user_name = user[0]
+    print("Accessing " + user_name + "'s Records")
+    if user_name:
+        conn = get_db_connection()
+        if conn.execute('SELECT * FROM Students WHERE Username = ?;',[user_name]).fetchone():
+            user_info = conn.execute("SELECT * FROM Students WHERE Username = ?;",[user_name]).fetchone()
+        elif conn.execute('SELECT * FROM Faculty WHERE Username = ?;',[user_name]).fetchone():
+            user_info = conn.execute("SELECT * FROM Faculty WHERE Username = ?;",[user_name]).fetchone()
+        elif conn.execute('SELECT * FROM Admins WHERE Username = ?;',[user_name]).fetchone():
+            user_info = conn.execute("SELECT * FROM Admins WHERE Username = ?;",[user_name]).fetchone()
+        else: #case should not happen as login is required for functionality to work, redirects to login page if user_name is not anywhere
+            print("error on finding proper creds")
+            return redirect(url_for('index'))
+        conn.close()
+        return render_template("VSI.html",user_info=user_info)
+    else: #should never happen as the login is required to get this page to work, error will appear if not properly logged in
+        print("no user_name value")
+        return redirect(url_for('index'))
 
 #RFG page route
 @app.route("/register-for-graduation")

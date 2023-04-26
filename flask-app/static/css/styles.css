@@ -26,6 +26,15 @@ html{
     /* padding: 0 2em 0 2em; */
     border-radius: 0.25em;
 }
+
+/* .login-form h3 {
+    text-align: left;
+}
+
+.login-form h5 {
+    text-align: left;
+} */
+
 .login-form input[type="password"],
 .login-form input[type="text"] {
     width: 100%;
