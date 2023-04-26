@@ -13,8 +13,8 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-# user variable
-user_name = ''
+# user global variable
+user = []
 
 #--------route and page function setup---------
 #index page/login page route
@@ -31,16 +31,22 @@ def login():
     print(password)
     if username and password:
         conn = get_db_connection()
-        if conn.execute('SELECT * FROM Students WHERE Username = ? AND Password = ?',(username,password)).fetchone():
+        if conn.execute('SELECT * FROM Students WHERE Username = ? AND Password = ?;',[username,password]).fetchone():
             student = conn.execute('SELECT Username FROM Students WHERE Username = ?;',[username]).fetchone()
+            for i in student:
+                user.append(i)
             conn.close()
-            return redirect(url_for('home',student=student))
-        elif conn.execute('SELECT * FROM Faculty WHERE Username = ? AND Password = ?',(username,password)).fetchone():
-            faculty = conn.execute('SELECT * FROM Faculty WHERE Username = ? AND Password = ?',(username,password)).fetchone()
+            return redirect(url_for('home'))
+        elif conn.execute('SELECT * FROM Faculty WHERE Username = ? AND Password = ?;',[username,password]).fetchone():
+            faculty = conn.execute('SELECT Username FROM Faculty WHERE Username = ?;',[username]).fetchone()
+            for i in faculty:
+                user.append(i)
             conn.close()
-            return redirect(url_for('home',faculty=faculty))
-        elif conn.execute('SELECT * FROM Admins WHERE Username = ? AND Password = ?',(username,password)).fetchone():
-            admin = conn.execute('SELECT * FROM Admins WHERE Username = ? AND Password = ?',(username,password)).fetchone()
+            return redirect(url_for('home'))
+        elif conn.execute('SELECT * FROM Admins WHERE Username = ? AND Password = ?;',[username,password]).fetchone():
+            admin = conn.execute('SELECT Username FROM Admins WHERE Username = ?;',[username]).fetchone()
+            for i in admin:
+                user.append(i)
             conn.close()
             return redirect(url_for('home',admin=admin))
         else:
@@ -53,6 +59,8 @@ def login():
 #logout functionality - within the home page
 @app.route('/logout')
 def logout():
+    print("Logging out " + user[0])
+    user.remove(user[0])
     return redirect(url_for('index'))
 
 #register page route
@@ -77,15 +85,15 @@ def register_new_user():
     print(phone_number)
     if username and password and name and address and email and phone_number:
         conn = get_db_connection()
-        if conn.execute('SELECT * FROM Students WHERE Username = ? OR Password = ? OR Email = ?;',(username,password,email)).fetchall():
+        if conn.execute('SELECT * FROM Students WHERE Username = ? OR Password = ? OR Email = ?;',[username,password,email]).fetchall():
             flash("User with given credentials already exist! Please give different credentails!")
             return redirect(url_for('register'))
-        elif conn.execute('SELECT * FROM Faculty WHERE Username = ? OR Password = ? OR Email = ?;',(username,password,email)).fetchall():
+        elif conn.execute('SELECT * FROM Faculty WHERE Username = ? OR Password = ? OR Email = ?;',[username,password,email]).fetchall():
             flash("User with given credentials already exist! Please give different credentails!")
             return redirect(url_for('register'))
         else:
             cur = conn.cursor()
-            cur.execute('INSERT INTO Students (Username,Password,Name,Address,Phone_Number,Email) VALUES (?,?,?,?,?,?);',(username,password,name,address,phone_number,email))
+            cur.execute('INSERT INTO Students (Username,Password,Name,Address,Phone_Number,Email) VALUES (?,?,?,?,?,?);',[username,password,name,address,phone_number,email])
             conn.commit()
             print("Successfully addded " + username + "!")
             conn.close()
@@ -97,7 +105,24 @@ def register_new_user():
 #homepage route
 @app.route("/home", methods=['GET'])
 def home():
-    return render_template("home.html")
+    user_name = user[0]
+    print("Logging in as " + user_name)
+    if user_name:
+        conn = get_db_connection()
+        if conn.execute('SELECT * FROM Students WHERE Username = ?;',[user_name]).fetchone():
+            user_info = conn.execute("SELECT * FROM Students WHERE Username = ?;",[user_name]).fetchone()
+        elif conn.execute('SELECT * FROM Faculty WHERE Username = ?;',[user_name]).fetchone():
+            user_info = conn.execute("SELECT * FROM Faculty WHERE Username = ?;",[user_name]).fetchone()
+        elif conn.execute('SELECT * FROM Admins WHERE Username = ?;',[user_name]).fetchone():
+            user_info = conn.execute("SELECT * FROM Admins WHERE Username = ?;",[user_name]).fetchone()
+        else: #case should not happen as login is required for functionality to work, redirects to login page if user_name is not anywhere
+            print("error on finding proper creds")
+            return redirect(url_for('index'))
+        conn.close()
+        return render_template("home.html",user_info=user_info)
+    else: #should never happen as the login is required to get this page to work, error will appear if not properly logged in
+        print("no user_name value")
+        return redirect(url_for('index'))
 
 #class registration page route
 @app.route("/class-registration")
