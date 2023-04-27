@@ -3,14 +3,18 @@
 {% block content %}
 <div class="login-form w3-center">
     <a href="{{ url_for('CR') }}" class="w3-display-topleft w3-margin back-btn"><i class="fa fa-caret-left"></i> Back</a>
-    <h1>{% block title %} NCAT View Suggested Classes {% endblock %}</h1><br>
-    <form action="" method="POST">
-        <input list="majors" name="major" placeholder="Select major here"><br><br>
-        <datalist id="majors">
-            <option value="">
-            <option value=""> 
-            <option value="">
-        </datalist>
+    <h1>{% block title %} NCAT Select Major {% endblock %}</h1><br>
+    {% for message in get_flashed_messages() %}
+        <div class="alert">{{ message }}</div><br>
+    {% endfor %}
+    <form action="/submit-major" method="POST">
+        <label for="major">Select Major: </label>
+        <select name="major" id="majors">
+            <option value="Computer Science">Computer Science</option>
+            <option value="Electrical Engineering">Electrical Engineering</option>
+            <option value="General Engineering">General Engineering</option>
+            <option value="Mathematics">Mathematics</option>
+        </select><br><br>
         <input type="submit">
     </form><br>
 </div>

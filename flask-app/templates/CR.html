@@ -4,6 +4,9 @@
 <div class="login-form w3-center">
     <a href="{{ url_for('home') }}" class="w3-display-topleft w3-margin back-btn"><i class="fa fa-caret-left"></i> Back</a>
     <h1>{% block title %} NCAT Class Registration {% endblock %}</h1><br>
+    {% for message in get_flashed_messages() %}
+        <div class="alert">{{ message }}</div><br>
+    {% endfor %}
     <form action="/submit-semester" method="POST">
         <label for="semester">Select Semester: </label>
         <select name="semester" id="semesters">
@@ -13,7 +16,7 @@
         </select><br><br>
         <input type="submit">
     </form><br>
-    <a class="btn" href="{{ url_for('VAC') }}">View Available Classes</a><br><br>
-    <a class="btn" href="{{ url_for('VSSC') }}">View Suggested Classes</a><br><br>
+    <a class="btn" href="{{ url_for('VAC', semester=semester) }}">View Available Classes</a><br><br>
+    <a class="btn" href="{{ url_for('VSSC', semester=semester) }}">View Suggested Classes</a><br><br>
 </div>
 {% endblock %}

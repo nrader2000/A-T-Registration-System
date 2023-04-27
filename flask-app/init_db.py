@@ -70,8 +70,7 @@ CREATE TABLE Courses
   Major TEXT NOT NULL,
   Title TEXT NOT NULL,
   Semester TEXT NOT NULL,
-  Prerequisites INT,
-  FOREIGN KEY (Prerequisites) REFERENCES Courses(CourseID)
+  Prerequisites Text
 );
 
 INSERT INTO Courses VALUES 
@@ -79,19 +78,19 @@ INSERT INTO Courses VALUES
             (2,'COMP651','Computer Science','Data Analysis Techniques','Fall2023',NULL),
             (3,'COMP710','Computer Science','Software Specification, Analysis, & Design','Spring2024',NULL),
             (4,'COMP725','Computer Science','Software Security Testing','Fall2023',NULL),
-            (5,'COMP726','Computer Science','Network Security','Fall2023',1),
+            (5,'COMP726','Computer Science','Network Security','Fall2023','COMP620'),
             (6,'COMP727','Computer Science','Secure Software Engineeering','Spring2024',NULL),
             (7,'COMP755','Computer Science','Advanced Operating Systems','Fall2023',NULL),
             (8,'COMP765','Computer Science','Data Mining','Summer2023',NULL),
             (9,'COMP775','Computer Science','Advanced Design and Analysis of Algorithms','Spring2024',NULL),
-            (10,'COMP851','Computer Science','Big Data Analytics','Spring2024',2),
+            (10,'COMP851','Computer Science','Big Data Analytics','Spring2024','COMP651'),
             (11,'ELEN602','Electrical Engineering','Semiconductor Theory & Devices','Fall2023',NULL),
             (12,'ELEN614','Electrical Engineering','Integrated Circuit Fabrication Methods','Summer2023',NULL),
             (13,'GEEN601','General Engineering','Industrial Automation','Summer2023',NULL),
             (14,'GEEN602','General Engineering','Advanced Manufacturing','Fall2023',NULL),
             (15,'MATH607','Mathematics','Theory of Numbers','Fall2023',NULL),
-            (16,'MATH602','Mathematics','Theory of Functions of a Real Variable I','Summer2023',NULL),
-            (17,'MATH602','Mathematics','Theory of Functions of a Real Variable II','Fall2023',16);
+            (16,'MATH701','Mathematics','Theory of Functions of a Real Variable I','Summer2023',NULL),
+            (17,'MATH702','Mathematics','Theory of Functions of a Real Variable II','Fall2023','MATH701');
 """)
 
 #create and insert data into classes table
@@ -127,3 +126,4 @@ INSERT INTO Classes VALUES
 #close the connection
 connection.commit()
 connection.close()
+print("DB INITIATED!!!")

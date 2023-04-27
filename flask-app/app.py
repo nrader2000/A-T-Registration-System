@@ -15,7 +15,7 @@ def get_db_connection():
 
 # user global variable
 user = []
-semester = ""
+semester = []
 
 #--------route and page function setup---------
 #index page/login page route
@@ -106,38 +106,42 @@ def register_new_user():
 #homepage route
 @app.route("/home", methods=['GET'])
 def home():
-    user_name = user[0]
-    print("Logging in as " + user_name)
-    if user_name:
-        conn = get_db_connection()
-        if conn.execute('SELECT * FROM Students WHERE Username = ?;',[user_name]).fetchone():
-            user_info = conn.execute("SELECT * FROM Students WHERE Username = ?;",[user_name]).fetchone()
-        elif conn.execute('SELECT * FROM Faculty WHERE Username = ?;',[user_name]).fetchone():
-            user_info = conn.execute("SELECT * FROM Faculty WHERE Username = ?;",[user_name]).fetchone()
-        elif conn.execute('SELECT * FROM Admins WHERE Username = ?;',[user_name]).fetchone():
-            user_info = conn.execute("SELECT * FROM Admins WHERE Username = ?;",[user_name]).fetchone()
-        else: #case should not happen as login is required for functionality to work, redirects to login page if user_name is not anywhere
-            print("error on finding proper creds")
-            return redirect(url_for('index'))
-        conn.close()
-        return render_template("home.html",user_info=user_info)
+    if user:
+        user_name = user[0]
+        print("Logging in as " + user_name)
+        if user_name:
+            conn = get_db_connection()
+            if conn.execute('SELECT * FROM Students WHERE Username = ?;',[user_name]).fetchone():
+                user_info = conn.execute("SELECT * FROM Students WHERE Username = ?;",[user_name]).fetchone()
+            elif conn.execute('SELECT * FROM Faculty WHERE Username = ?;',[user_name]).fetchone():
+                user_info = conn.execute("SELECT * FROM Faculty WHERE Username = ?;",[user_name]).fetchone()
+            elif conn.execute('SELECT * FROM Admins WHERE Username = ?;',[user_name]).fetchone():
+                user_info = conn.execute("SELECT * FROM Admins WHERE Username = ?;",[user_name]).fetchone()
+            else: #case should not happen as login is required for functionality to work, redirects to login page if user_name is not anywhere
+                print("error on finding proper creds")
+                return redirect(url_for('index'))
+            conn.close()
+            return render_template("home.html",user_info=user_info)
     else: #should never happen as the login is required to get this page to work, error will appear if not properly logged in
-        print("no user_name value")
         return redirect(url_for('index'))
 
 #class registration page route
-@app.route("/class-registration", methods=['GET','POST'])
+@app.route("/class-registration", methods=['GET'])
 def CR():
-    if semester:
-        print(semester)
-    return render_template("CR.html")
+    semester_select = request.args.get('semester')
+    return render_template("CR.html",semester=semester_select)
 
 #submit semester functionality - within class registation page
 @app.route("/submit-semester", methods=['POST'])
 def submit_semester():
-    semester = request.form.get('semester')
-    print("Selected " + semester + "...")
-    return redirect(url_for('CR',semester=semester))
+    semester_select = request.form.get('semester')
+    print("Selected " + semester_select + "...")
+    if semester:
+        semester.remove(semester[0])
+        semester.append(semester_select)
+    else:
+        semester.append(semester_select)
+    return redirect(url_for('CR',semester=semester_select))
 
 #academic audit page route
 @app.route("/academic-audit")
@@ -152,21 +156,51 @@ def COR():
 #VAC page route
 @app.route("/view-available-classes", methods=['GET'])
 def VAC():
-    semester_select = semester
-    print(semester_select)
+    semester_select = request.args.get('semester')
     if semester_select:
         conn = get_db_connection()
         courses = conn.execute('SELECT * FROM Courses WHERE Semester = ?;',[semester_select]).fetchall()
         conn.close()
-    else: #should not get here my normal means
-        print("no semester selected")
+    else:
+        flash("No semester selected! Please choose a semester and submit!")
         return redirect(url_for('CR'))
     return render_template("VAC.html",courses=courses)
 
-#VSSC page route
+#VSSC page route (selects major here)
 @app.route("/view-suggested-semester-classes")
 def VSSC():
+    semester_select = request.args.get('semester')
+    if semester_select:
+        pass
+    else:
+        flash("No semester selected! Please choose a semester and submit!")
+        return redirect(url_for('CR'))
     return render_template("VSSC.html")
+
+#Second VSSC page route (actual classes appear here)
+@app.route("/VSSC_2",methods=['GET'])
+def VSSC_2():
+    semester_select = request.args.get('semester')
+    major_select = request.args.get('major')
+    if major_select:
+        conn = get_db_connection()
+        courses = conn.execute('SELECT * FROM Courses WHERE Semester = ? AND Major = ?;',[semester_select,major_select]).fetchall()
+        conn.close
+        if not courses:
+            flash("No current classes under these specifications at this time!")
+    else:
+        flash("Missing major! Please choose a major!")
+        return redirect(url_for('VSSC'))
+    return render_template("VSSC_2.html",courses=courses)
+
+#submit major functionality - within VSSC page
+@app.route("/submit-major", methods=['POST'])
+def submit_major():
+    semester_select = semester[0]
+    print("With " + semester_select + "...")
+    major_select = request.form.get('major')
+    print("Selected " + major_select + "...")
+    return redirect(url_for('VSSC_2',semester=semester_select,major=major_select))
 
 #grades page route
 @app.route("/view-grades")
@@ -204,10 +238,3 @@ def VSI():
 @app.route("/register-for-graduation")
 def RFG():
     return render_template("RFG.html")
-
-@app.route("/db-test")
-def dbtest():
-    conn = get_db_connection()
-    courses = conn.execute('SELECT * FROM Courses').fetchall()
-    conn.close()
-    return render_template("db-test.html",courses=courses)
