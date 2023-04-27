@@ -3,7 +3,7 @@
 {% block content %}
 <div class="login-form w3-center">
     <a href="{{ url_for('CR') }}" class="w3-display-topleft w3-margin back-btn"><i class="fa fa-caret-left"></i> Back</a>
-    <h1>{% block title %} NCAT Select Major {% endblock %}</h1><br>
+    <h1>{% block title %} Select Major {% endblock %}</h1><br>
     {% for message in get_flashed_messages() %}
         <div class="alert">{{ message }}</div><br>
     {% endfor %}

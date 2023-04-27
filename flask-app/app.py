@@ -32,20 +32,26 @@ def login():
     print(password)
     if username and password:
         conn = get_db_connection()
-        if conn.execute('SELECT * FROM Students WHERE Username = ? AND Password = ?;',[username,password]).fetchone():
-            student = conn.execute('SELECT Username FROM Students WHERE Username = ?;',[username]).fetchone()
+        if conn.execute('SELECT * FROM Students WHERE Username = ? AND Password = ?;',
+                        [username,password]).fetchone():
+            student = conn.execute('SELECT Username FROM Students WHERE Username = ?;',
+                                   [username]).fetchone()
             for i in student:
                 user.append(i)
             conn.close()
             return redirect(url_for('home'))
-        elif conn.execute('SELECT * FROM Faculty WHERE Username = ? AND Password = ?;',[username,password]).fetchone():
-            faculty = conn.execute('SELECT Username FROM Faculty WHERE Username = ?;',[username]).fetchone()
+        elif conn.execute('SELECT * FROM Faculty WHERE Username = ? AND Password = ?;',
+                          [username,password]).fetchone():
+            faculty = conn.execute('SELECT Username FROM Faculty WHERE Username = ?;',
+                                   [username]).fetchone()
             for i in faculty:
                 user.append(i)
             conn.close()
             return redirect(url_for('home'))
-        elif conn.execute('SELECT * FROM Admins WHERE Username = ? AND Password = ?;',[username,password]).fetchone():
-            admin = conn.execute('SELECT Username FROM Admins WHERE Username = ?;',[username]).fetchone()
+        elif conn.execute('SELECT * FROM Admins WHERE Username = ? AND Password = ?;',
+                          [username,password]).fetchone():
+            admin = conn.execute('SELECT Username FROM Admins WHERE Username = ?;',
+                                 [username]).fetchone()
             for i in admin:
                 user.append(i)
             conn.close()
@@ -53,7 +59,8 @@ def login():
         else:
             flash("Invalid Credentials! Please Try Again!")
             return redirect(url_for('index'))
-    else: #case should never happen as html form requires both these to be filled out before sending data here
+    else: #case should never happen as html form requires both these 
+          #to be filled out before sending data here
         flash("Missing Credentials! Enter both username and password!")
         return redirect(url_for('index'))
 
@@ -135,7 +142,7 @@ def CR():
 @app.route("/submit-semester", methods=['POST'])
 def submit_semester():
     semester_select = request.form.get('semester')
-    print("Selected " + semester_select + "...")
+    flash("Selected " + semester_select + "!")
     if semester:
         semester.remove(semester[0])
         semester.append(semester_select)
@@ -184,7 +191,8 @@ def VSSC_2():
     major_select = request.args.get('major')
     if major_select:
         conn = get_db_connection()
-        courses = conn.execute('SELECT * FROM Courses WHERE Semester = ? AND Major = ?;',[semester_select,major_select]).fetchall()
+        courses = conn.execute('SELECT * FROM Courses WHERE Semester = ? AND Major = ?;',
+                               [semester_select,major_select]).fetchall()
         conn.close
         if not courses:
             flash("No current classes under these specifications at this time!")
